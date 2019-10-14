@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jee="http://www.springframework.org/schema/jee"
+	   xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	   xmlns:util="http://www.springframework.org/schema/util"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+                     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+                     http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-2.0.xsd 
+                     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+	<bean id="tccDataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${tcc.mysql.url}" />
+		<property name="username" value="${tcc.mysql.username}" />
+		<property name="password" value="${tcc.mysql.password}" />
+		<property name="initialSize" value="${initialSize}" />
+		<property name="maxActive" value="${maxActive}" />
+		<property name="maxIdle" value="${maxIdle}" />
+		<property name="maxWait" value="${maxWait}" />
+		<property name="defaultAutoCommit" value="true" />
+		<property name="timeBetweenEvictionRunsMillis" value="${timeBetweenEvictionRunsMillis}" />
+		<property name="minEvictableIdleTimeMillis" value="${minEvictableIdleTimeMillis}" />
+	</bean>
+
+	<bean id="transactionRepository"
+		  class="org.mengyun.tcctransaction.spring.repository.SpringJdbcTransactionRepository">
+		<property name="dataSource" ref="tccDataSource"/>
+		<property name="domain" value="business"/>
+		<property name="tbSuffix" value="_UGBIZCORE"/>
+	</bean>
+	<bean class="org.mengyun.tcctransaction.spring.recover.DefaultRecoverConfig">
+		<property name="maxRetryCount" value="30" />
+		<property name="recoverDuration" value="120" />
+		<property name="cronExpression" value="0 */1 * * * ?" />
+		<property name="delayCancelExceptions">
+			<util:set>
+				<value>com.alibaba.dubbo.remoting.TimeoutException</value>
+			</util:set>
+		</property>
+	</bean>
+	
+	<!-- RedisTransactionRepository -->
+	<!--<bean id="transactionRepository" class="org.mengyun.tcctransaction.repository.RedisTransactionRepository">-->
+		<!--<property name="keyPrefix" value="TCC:BIZ:"/>-->
+		<!--<property name="jedisPool" ref="jedisPoolTcc"/>-->
+	<!--</bean>-->
+	 <!---->
+	<!--<bean id="jedisPoolConfigTcc" class="redis.clients.jedis.JedisPoolConfig">-->
+		<!--<property name="maxTotal" value="1000"/>-->
+		<!--<property name="maxWaitMillis" value="1000"/>-->
+	<!--</bean>-->
+	 <!---->
+	<!--<bean id="jedisPoolTcc" class="redis.clients.jedis.JedisPool">-->
+		<!--<constructor-arg index="0" ref="jedisPoolConfigTcc"/>-->
+		<!--<constructor-arg index="1" value="172.30.66.22"/>-->
+		<!--<constructor-arg index="2" value="6379" type="int"/>-->
+		<!--<constructor-arg index="3" value="30000" type="int"/>-->
+		<!--<constructor-arg index="4" value="123456"/>-->
+	<!--</bean>-->
+	<!---->
+</beans>
