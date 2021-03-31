@@ -37,7 +37,7 @@
 		<tcc-transaction-spring-version>1.2.4.20</tcc-transaction-spring-version>
 		<nacos-config-spring-boot-starter-version>0.2.1</nacos-config-spring-boot-starter-version>
 		<spring-boot-starter-data-redis-version>2.1.2.RELEASE</spring-boot-starter-data-redis-version>
-		<guava-version>26.0-jre</guava-version>
+		<guava-version>29.0-jre</guava-version>
 		<dubbo.version>2.7.1</dubbo.version>
 	</properties>
 
