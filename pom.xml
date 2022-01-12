@@ -38,7 +38,7 @@
 		<nacos-config-spring-boot-starter-version>0.2.1</nacos-config-spring-boot-starter-version>
 		<spring-boot-starter-data-redis-version>2.1.2.RELEASE</spring-boot-starter-data-redis-version>
 		<guava-version>26.0-jre</guava-version>
-		<dubbo.version>2.7.1</dubbo.version>
+		<dubbo.version>2.7.15</dubbo.version>
 	</properties>
 
 	<dependencyManagement>
